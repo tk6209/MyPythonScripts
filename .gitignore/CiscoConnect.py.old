@@ -1,0 +1,74 @@
+import pyautogui as pi
+import os, time, easygui
+
+#starts btn vars
+btn = ""
+
+#shows dekstop
+pi.hotkey('win', 'd') 
+print('Starting WINAUTH the scritp ....')
+time.sleep(1)
+
+#locate winauth app
+btn = pi.locateOnScreen('C:/scripts/Py/pyautogui/winauth.png')
+pi.click(btn,clicks=2)
+time.sleep(2)
+
+#pass the credentials
+pi.typewrite(os.environ.get('cred_winauth'))
+btn = pi.locateOnScreen('C:/scripts/Py/pyautogui/winauth.ok.png')
+pi.click(btn,clicks=2)
+
+#gets the current code
+btn = pi.locateOnScreen('C:/scripts/Py/pyautogui/winauth.code.png')
+pi.click(btn,button='right',clicks=1)
+btn = pi.locateOnScreen('C:/scripts/Py/pyautogui/winauth.copy.png')
+pi.click(btn,button='left',clicks=1)
+
+#initiate the AnnyConnect activity
+print('Open Cisco...')
+btn = pi.locateOnScreen('C:/scripts/Py/pyautogui/cisco.png')
+pi.click(btn,clicks=2)
+print('Enter...')
+pi.hotkey('enter')
+time.sleep(3)
+
+
+#create status variables
+conn = pi.locateOnScreen('C:/scripts/Py/pyautogui/cisco.connected.png')
+disconn = pi.locateOnScreen('C:/scripts/Py/pyautogui/cisco.connecting.png')
+
+
+#determine the system status
+if disconn is not None :
+
+	print('Disconnected, connecting ...')
+	print('Cisco Connect...')
+	#btn = pi.locateOnScreen('C:/scripts/Py/pyautogui/cisco.connect.png')
+	#pi.click(btn,button='left',clicks=1)
+	#time.sleep(2)
+	print('cisco type...')
+	pi.typewrite(os.environ.get('cred_anyconn'))
+	print('cisco paste...')
+	pi.hotkey('tab')
+	pi.hotkey('ctrl', 'v') 
+	btn = pi.locateOnScreen('C:/scripts/Py/pyautogui/cisco.ok.png')
+	pi.click(btn,clicks=1)
+
+elif conn is not None :
+	#easygui.msgbox("Connected, pass ...", title="INFO")
+	print('Connected, pass ...')
+	
+else:
+	print('Unkown error ...')
+	scr1 = pi.screenshot()
+	scr1.save('unkown_error.png')
+
+
+#closes winauth
+pi.click(1200,420)
+#closes cisco if needed
+pi.click(1200,420)
+
+
+exit
